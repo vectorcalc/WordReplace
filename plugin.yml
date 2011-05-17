@@ -1,0 +1,5 @@
+name: WordReplace
+
+main: dcsiira.wordreplace.WordReplace
+
+version: 1.0
