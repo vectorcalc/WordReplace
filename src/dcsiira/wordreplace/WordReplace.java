@@ -4,8 +4,12 @@ package dcsiira.wordreplace;
 import java.util.HashMap;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import org.bukkit.event.Event;
 import org.bukkit.entity.Player;
@@ -26,16 +30,15 @@ public class WordReplace extends JavaPlugin {
     private Logger log;
     Configuration config;
    
+    public static WordReplace instance;
+    public static File wordreplace;
+    
 
-    public List<String> replaceFromWords = new ArrayList<String>();
-    public String replaceWordColor = "AQUA";
-    public String replaceToWord = "TestWordReplace";
-    public String normalChatColor = "WHITE";
-    public boolean debug = true;
 
 
     public void onDisable() {
         System.out.println("[WordReplace] Plugin Disabled"); //Show Plugin Disabled in Log File
+        pm.disablePlugin(this);
     }
 
     public void onEnable() {
@@ -45,18 +48,15 @@ public class WordReplace extends JavaPlugin {
         this.pm = getServer().getPluginManager();
         this.log = getServer().getLogger();
         this.config = getConfiguration();
-             
-        if (!new File(getDataFolder(), "config.yml").exists()) {
-            defaultConfig();
-          }
-          loadConfig();
+        instance = this;
+        wordreplace = getFile();
+        
+        WRConfiguration.checkConfigFile();
         
         pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Lowest, this); //Register Event type/priority with Bukkit
 
-        //getCommand("WR").setExecutor(new WRCommand(this)); //Register command "/WR" with Bukkit
-
-        PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
+        getCommand("WR").setExecutor(new WRCommand(this)); //Register command "/WR" with Bukkit
+        System.out.println(this.getDescription().getName() + " version " + this.getDescription().getVersion() + " is enabled!" );
     }
 
     public boolean isDebugging(final Player player) {
@@ -67,42 +67,6 @@ public class WordReplace extends JavaPlugin {
         }
     }
 
-    public void loadConfig() {
-        this.config.load();
-        if(checkVersion())
-        {
-            this.replaceFromWords = this.config.getStringList("replace-these-words", this.replaceFromWords);
-            this.replaceWordColor = this.config.getString("replace-word-color", this.replaceWordColor);
-            this.replaceToWord = this.config.getString("replace-words-to", this.replaceToWord);
-            this.normalChatColor = this.config.getString("normal-chat-color", this.normalChatColor);
-            this.debug = this.config.getBoolean("is-debugging", this.debug);
-        }
-        else
-        {
-        	defaultConfig();
-        }
-
-      }
-    private void defaultConfig() {
-        this.config.setProperty("Word-Replace-Version", this.getDescription().getVersion());
-        this.config.setProperty("replace-these-words", this.replaceFromWords);
-        this.config.setProperty("replace-word-color", this.replaceWordColor);
-        this.config.setProperty("replace-words-to", this.replaceToWord);
-        this.config.setProperty("normal-chat-color", this.normalChatColor);
-        this.config.setProperty("is-debugging", this.debug);
-        this.config.save();
-      }
-    
-    public boolean checkVersion()
-    {
-    	String configVersion = null;
-    	double curVersion = Double.parseDouble(this.getDescription().getVersion());
-    	configVersion = this.config.getString("Word-Replace-Version", configVersion);
-    	if(curVersion > Double.parseDouble(configVersion))
-    			return false;
-    	return true;
-    }
-    
     public void setDebugging(final Player player, final boolean value) {
         debugees.put(player, value);
     }

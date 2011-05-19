@@ -26,7 +26,7 @@ public class WRPlayerListener extends PlayerListener {
     
     public String replace(Player p, String playerMessage)
     {
-        if ((plugin.replaceFromWords == null) || (plugin.replaceFromWords.size() == 0))
+        if ((WRConfiguration.replaceFromWords == null) || (WRConfiguration.replaceFromWords.size() == 0))
         	  return playerMessage;
 
          String[] split = playerMessage.split(" ");
@@ -34,15 +34,15 @@ public class WRPlayerListener extends PlayerListener {
 
 
         for (String word : split) {
-      	  for (String replace : plugin.replaceFromWords) {
+      	  for (String replace : WRConfiguration.replaceFromWords) {
               if (word.equalsIgnoreCase(replace))
-                word = getColor(plugin.replaceWordColor) + plugin.replaceToWord + getColor(plugin.normalChatColor); 
+                word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + getColor(WRConfiguration.normalChatColor); 
               else if(word.equalsIgnoreCase(replace + "!"))
-                  word = getColor(plugin.replaceWordColor) + plugin.replaceToWord + "!" + getColor(plugin.normalChatColor);
+                  word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + "!" + getColor(WRConfiguration.normalChatColor);
               else if(word.equalsIgnoreCase(replace + "?"))
-                  word = getColor(plugin.replaceWordColor) + plugin.replaceToWord + "?" + getColor(plugin.normalChatColor);
+                  word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + "?" + getColor(WRConfiguration.normalChatColor);
               else if(word.equalsIgnoreCase(replace + ","))
-                  word = getColor(plugin.replaceWordColor) + plugin.replaceToWord + "," + getColor(plugin.normalChatColor); 
+                  word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + "," + getColor(WRConfiguration.normalChatColor); 
       	  }
               out.append(word).append(" ");
         }

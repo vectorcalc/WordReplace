@@ -1,13 +1,14 @@
 
 package dcsiira.wordreplace;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
- * Handler for the /WR sample command.
+ * Handler for the /WR command.
  * @author DCSiira
  */
 public class WRCommand implements CommandExecutor {
@@ -24,20 +25,26 @@ public class WRCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if (split.length == 0) {
-            String version = plugin.getDescription().getVersion();
-            player.sendMessage("WordReplace Version: " + version);
-            return true;
-        } else if (split.length == 1){
+        if (split.length == 1){
         	if(split[0].equalsIgnoreCase("version"))
         	{
                 String version = plugin.getDescription().getVersion();
-                player.sendMessage("WordReplace Version: " + version);
+                player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Version: " + version);
         	}
-        	if(split[0].equalsIgnoreCase("reload"))
+        	else if(split[0].equalsIgnoreCase("reload"))
         	{
-                plugin.loadConfig();
-                player.sendMessage("WordReplace Reloaded Successfully");
+                WRConfiguration.checkConfigFile();
+                player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Reloaded Successfully");
+        	}
+        	else if(split[0].equalsIgnoreCase("list"))
+        	{
+                player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Replaces:");
+                String msg = " | ";
+            	for (String replace : WRConfiguration.replaceFromWords) {
+            		msg += ChatColor.AQUA + replace + ChatColor.WHITE + " | ";
+            	}
+                player.sendMessage(msg);
+                player.sendMessage(ChatColor.WHITE + "With" + ChatColor.AQUA + WRConfiguration.replaceToWord);
         	}
         	return true;
         }
