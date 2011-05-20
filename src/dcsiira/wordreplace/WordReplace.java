@@ -47,11 +47,8 @@ public class WordReplace extends JavaPlugin {
         // Register our events
         this.pm = getServer().getPluginManager();
         this.log = getServer().getLogger();
-        this.config = getConfiguration();
-        instance = this;
-        wordreplace = getFile();
-        
-        WRConfiguration.checkConfigFile();
+
+        load();
         
         pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Lowest, this); //Register Event type/priority with Bukkit
 
@@ -68,6 +65,20 @@ public class WordReplace extends JavaPlugin {
     }
 
     public void setDebugging(final Player player, final boolean value) {
+
         debugees.put(player, value);
+    }
+    
+    public void load()
+    {
+        this.config = getConfiguration();
+        instance = this;
+        wordreplace = getFile();
+        
+        WRConfiguration.replaceFromWords = (List<String>)WordReplace.instance.getConfiguration().getProperty("replace-these-words");
+        WRConfiguration.replaceWordColor = (String)WordReplace.instance.getConfiguration().getProperty("replaceWordColor");
+        WRConfiguration.replaceToWord = (String)WordReplace.instance.getConfiguration().getProperty("replace-words-to");
+        WRConfiguration.normalChatColor = (String)WordReplace.instance.getConfiguration().getProperty("normal-chat-color");
+        System.out.println("WordReplace: read configuration file");
     }
 }

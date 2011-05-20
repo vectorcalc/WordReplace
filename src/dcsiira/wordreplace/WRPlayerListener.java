@@ -49,7 +49,7 @@ public class WRPlayerListener extends PlayerListener {
         return out.toString();
       }
     
-    public ChatColor getColor(String color)
+    public static ChatColor getColor(String color)
 
 
     {

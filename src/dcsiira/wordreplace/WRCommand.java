@@ -33,7 +33,7 @@ public class WRCommand implements CommandExecutor {
         	}
         	else if(split[0].equalsIgnoreCase("reload"))
         	{
-                WRConfiguration.checkConfigFile();
+                plugin.load();
                 player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Reloaded Successfully");
         	}
         	else if(split[0].equalsIgnoreCase("list"))
@@ -41,10 +41,10 @@ public class WRCommand implements CommandExecutor {
                 player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Replaces:");
                 String msg = " | ";
             	for (String replace : WRConfiguration.replaceFromWords) {
-            		msg += ChatColor.AQUA + replace + ChatColor.WHITE + " | ";
+            		msg += ChatColor.RED + replace + ChatColor.WHITE + " | ";
             	}
                 player.sendMessage(msg);
-                player.sendMessage(ChatColor.WHITE + "With" + ChatColor.AQUA + WRConfiguration.replaceToWord);
+                player.sendMessage(ChatColor.WHITE + "With " + WRPlayerListener.getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord);
         	}
         	return true;
         }

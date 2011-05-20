@@ -13,10 +13,10 @@ import java.util.jar.JarFile;
 public abstract class WRConfiguration
 { 
   
-  public static List<String> replaceFromWords = Arrays.asList("DCSiira", "DC", "Siira");
-  public static String replaceWordColor = "AQUA";
-  public static String replaceToWord = "Admin";
-  public static String normalChatColor = "WHITE";
+  public static List<String> replaceFromWords;
+  public static String replaceWordColor;
+  public static String replaceToWord;
+  public static String normalChatColor;
 
   public static void checkConfigFile()
   {
@@ -32,26 +32,22 @@ public abstract class WRConfiguration
         os.write(buf);
         os.close();
         WordReplace.instance.getConfiguration().load();
+        System.out.println("WordReplace: configuration file generated successfully");
       } catch (Exception e) {
-        System.out.println("Growbie: could not create configuration file");
+        System.out.println("WordReplace: could not generate configuration file");
       }
-
-    
-    replaceFromWords = Arrays.asList("DCSiira", "DC", "Siira");
-    replaceWordColor = "AQUA";
-    replaceToWord = "Admin";
-    normalChatColor = "WHITE";
-    
+      
     try
-    {      
+    { 
       replaceFromWords = (List<String>)WordReplace.instance.getConfiguration().getProperty("replace-these-words");
       replaceWordColor = (String)WordReplace.instance.getConfiguration().getProperty("replaceWordColor");
       replaceToWord = (String)WordReplace.instance.getConfiguration().getProperty("replace-words-to");
       normalChatColor = (String)WordReplace.instance.getConfiguration().getProperty("normal-chat-color");
+      System.out.println("WordReplace: read configuration file");
     }
     catch (Exception e)
     {
-      System.out.println("Growbie: error loading configuration");
+      System.out.println("WordReplace: error reading configuration file");
     }
   }
 
