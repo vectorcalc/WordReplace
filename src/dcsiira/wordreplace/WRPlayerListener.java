@@ -11,9 +11,11 @@ import org.bukkit.ChatColor;
  */
 public class WRPlayerListener extends PlayerListener {
     private final WordReplace plugin;
+    private final WRConfiguration config;
 
-    public WRPlayerListener(WordReplace instance) {
-        plugin = instance;
+    public WRPlayerListener(WordReplace plugin, WRConfiguration config) {
+        this.plugin = plugin;
+        this.config = config;
     }
 
 
@@ -26,32 +28,37 @@ public class WRPlayerListener extends PlayerListener {
     
     public String replace(Player p, String playerMessage)
     {
-        if ((WRConfiguration.replaceFromWords == null) || (WRConfiguration.replaceFromWords.size() == 0))
-        	  return playerMessage;
-
-         String[] split = playerMessage.split(" ");
+        String[] split = playerMessage.split(" ");
         StringBuilder out = new StringBuilder();
 
-
-        for (String word : split) {
-      	  for (String replace : WRConfiguration.replaceFromWords) {
-              if (word.equalsIgnoreCase(replace))
-                word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + getColor(WRConfiguration.normalChatColor); 
-              else if(word.equalsIgnoreCase(replace + "!"))
-                  word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + "!" + getColor(WRConfiguration.normalChatColor);
-              else if(word.equalsIgnoreCase(replace + "?"))
-                  word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + "?" + getColor(WRConfiguration.normalChatColor);
-              else if(word.equalsIgnoreCase(replace + ","))
-                  word = getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord + "," + getColor(WRConfiguration.normalChatColor); 
-      	  }
-              out.append(word).append(" ");
-        }
+            for (String word : split) 
+            {
+            	for(int i = 0; i < config.numVars; i++)
+            	{
+              	  for (String replace : config.parseReplaceWords(i))
+            	  {
+                     word = checkWord(config.parseReplaceToWord(i), replace, word, getColor(config.parseColor(i)));
+              	  }
+            	}
+                out.append(word).append(" ");
+            }
         return out.toString();
-      }
+    }
     
-    public static ChatColor getColor(String color)
-
-
+    public String checkWord(String replaceTo, String replaceFrom, String word, ChatColor color)
+    {
+    	 if (word.equalsIgnoreCase(replaceFrom))
+             return color + replaceTo + getColor(config.normalChatColor);
+         else if(word.equalsIgnoreCase(replaceFrom + "!"))
+             return color + replaceTo+ "!" + getColor(config.normalChatColor);
+         else if(word.equalsIgnoreCase(replaceFrom + "?"))
+             return color + replaceTo + "?" + getColor(config.normalChatColor);
+         else if(word.equalsIgnoreCase(replaceFrom + ","))
+             return color + replaceTo + "," + getColor(config.normalChatColor);
+         else
+        	 return word;
+    }
+    public ChatColor getColor(String color)
     {
     	if(color.equalsIgnoreCase("BLACK") || color.equalsIgnoreCase("&0"))
     			return ChatColor.BLACK;

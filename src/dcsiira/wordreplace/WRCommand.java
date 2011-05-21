@@ -13,9 +13,11 @@ import org.bukkit.command.CommandSender;
  */
 public class WRCommand implements CommandExecutor {
     private final WordReplace plugin;
+    private final WRConfiguration config;
 
-    public WRCommand(WordReplace plugin) {
+    public WRCommand(WordReplace plugin, WRConfiguration config) {
         this.plugin = plugin;
+        this.config = config;
     }
 
     @Override
@@ -33,18 +35,18 @@ public class WRCommand implements CommandExecutor {
         	}
         	else if(split[0].equalsIgnoreCase("reload"))
         	{
-                plugin.load();
+        		config.checkConfigFile();
                 player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Reloaded Successfully");
         	}
         	else if(split[0].equalsIgnoreCase("list"))
         	{
-                player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Replaces:");
+             /*   player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Replaces:");
                 String msg = " | ";
             	for (String replace : WRConfiguration.replaceFromWords) {
             		msg += ChatColor.RED + replace + ChatColor.WHITE + " | ";
             	}
                 player.sendMessage(msg);
-                player.sendMessage(ChatColor.WHITE + "With " + WRPlayerListener.getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord);
+                player.sendMessage(ChatColor.WHITE + "With " + WRPlayerListener.getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord);*/
         	}
         	return true;
         }

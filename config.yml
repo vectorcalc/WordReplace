@@ -4,11 +4,15 @@
 #The color of chat after the replaced word
 normal-chat-color: WHITE
 
-# The word that other words will be changed to, as in Word2
-replace-words-to: Admin
+#The color of chat after the replaced word
+number-of-lists: 2
 
-# The list or words in single qoutes that will be replaced, as in Word1
-replace-these-words: ['DCSiira', 'DC' , 'Siira']
+# A list of List<String> values that go in this order:
+#  - WordColor,Word2,Words:To:Be:Replaced
+# no spaces, there are two examples below
 
-# The resulting color of Word2
-replaceWordColor: AQUA
+replaceList: 
+- AQUA,Admin,dcsiira:dc:siira
+- RED,Almighty God,Notch:Marcus:God
+
+# The First Example replaces the words "dcsiira", "dc", and "siira" with admin colored AQUA

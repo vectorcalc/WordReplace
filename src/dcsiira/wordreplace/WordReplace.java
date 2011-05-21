@@ -4,17 +4,10 @@ package dcsiira.wordreplace;
 import java.util.HashMap;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import org.bukkit.event.Event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
@@ -24,14 +17,14 @@ import org.bukkit.util.config.Configuration;
  * @author DCSiira
  */
 public class WordReplace extends JavaPlugin {
-    private final WRPlayerListener playerListener = new WRPlayerListener(this);
+    private final WRConfiguration config = new WRConfiguration(this);
+    private final WRPlayerListener playerListener = new WRPlayerListener(this, config);
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
+
     private PluginManager pm;
     private Logger log;
-    Configuration config;
    
-    public static WordReplace instance;
-    public static File wordreplace;
+    public File wordreplace;
     
 
 
@@ -47,12 +40,12 @@ public class WordReplace extends JavaPlugin {
         // Register our events
         this.pm = getServer().getPluginManager();
         this.log = getServer().getLogger();
-
-        load();
+        wordreplace = getFile();
+        config.checkConfigFile();
         
         pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Lowest, this); //Register Event type/priority with Bukkit
 
-        getCommand("WR").setExecutor(new WRCommand(this)); //Register command "/WR" with Bukkit
+        getCommand("WR").setExecutor(new WRCommand(this, config)); //Register command "/WR" with Bukkit
         System.out.println(this.getDescription().getName() + " version " + this.getDescription().getVersion() + " is enabled!" );
     }
 
@@ -68,17 +61,5 @@ public class WordReplace extends JavaPlugin {
 
         debugees.put(player, value);
     }
-    
-    public void load()
-    {
-        this.config = getConfiguration();
-        instance = this;
-        wordreplace = getFile();
-        
-        WRConfiguration.replaceFromWords = (List<String>)WordReplace.instance.getConfiguration().getProperty("replace-these-words");
-        WRConfiguration.replaceWordColor = (String)WordReplace.instance.getConfiguration().getProperty("replaceWordColor");
-        WRConfiguration.replaceToWord = (String)WordReplace.instance.getConfiguration().getProperty("replace-words-to");
-        WRConfiguration.normalChatColor = (String)WordReplace.instance.getConfiguration().getProperty("normal-chat-color");
-        System.out.println("WordReplace: read configuration file");
-    }
+
 }
