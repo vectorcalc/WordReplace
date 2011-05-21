@@ -4,7 +4,7 @@
 #The color of chat after the replaced word
 normal-chat-color: WHITE
 
-#The color of chat after the replaced word
+#The number of word lists(VERY IMPORTANT)
 number-of-lists: 2
 
 # A list of List<String> values that go in this order:
