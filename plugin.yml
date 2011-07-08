@@ -1,6 +1,6 @@
 name: WordReplace
 main: dcsiira.wordreplace.WordReplace
-version: 3.0
+version: 4.0
 commands:
   WR:
     description: States the version of the plugin or reloads the confiq

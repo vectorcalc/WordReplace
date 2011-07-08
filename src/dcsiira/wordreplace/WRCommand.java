@@ -9,19 +9,20 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Handler for the /WR command.
- * @author DCSiira
+ * @author DCSiiras
  */
-public class WRCommand implements CommandExecutor {
+public class WRCommand implements CommandExecutor
+{
     private final WordReplace plugin;
-    private final WRConfiguration config;
 
-    public WRCommand(WordReplace plugin, WRConfiguration config) {
+    public WRCommand(WordReplace plugin)
+    {
         this.plugin = plugin;
-        this.config = config;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] split) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] split)
+    {
         if (!(sender instanceof Player)) {
             return false;
         }
@@ -35,23 +36,34 @@ public class WRCommand implements CommandExecutor {
         	}
         	else if(split[0].equalsIgnoreCase("reload"))
         	{
-        		config.checkConfigFile();
-                player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Reloaded Successfully");
+        		//if(plugin.reload())
+        		//	player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Reloaded Successfully");
+        		//else
+        		//	player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Error on reload");  
+        		player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] This does not work YET");
         	}
-        	else if(split[0].equalsIgnoreCase("list"))
-        	{
-             /*   player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Replaces:");
-                String msg = " | ";
-            	for (String replace : WRConfiguration.replaceFromWords) {
-            		msg += ChatColor.RED + replace + ChatColor.WHITE + " | ";
-            	}
-                player.sendMessage(msg);
-                player.sendMessage(ChatColor.WHITE + "With " + WRPlayerListener.getColor(WRConfiguration.replaceWordColor) + WRConfiguration.replaceToWord);*/
-        	}
+        	else if(split[0].equalsIgnoreCase("list"))        			
+        		wordList(player);
         	return true;
         }
         else {
             return false;
         }
+    }
+    public void wordList(Player player)
+    {
+        player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Replaces:");
+        for(int listLoop = 0; listLoop < plugin.config.numberOfLists; listLoop++)
+    	{
+        	String wordReplacing = plugin.config.parseWordReplacing(listLoop);
+        	String wordColor = plugin.config.parseWordColor(listLoop);
+        	String wordsBeingReplaced = "";
+        	
+        	for (String tempWordBeingReplaced : plugin.config.parseWordsBeingReplaced(listLoop))
+        		wordsBeingReplaced += tempWordBeingReplaced + ", ";
+        	
+        	wordsBeingReplaced = wordsBeingReplaced.substring(0, wordsBeingReplaced.length()-2);
+        	player.sendMessage(wordsBeingReplaced + " with " + plugin.config.getChatColor(wordColor) + wordReplacing );
+    	}
     }
 }

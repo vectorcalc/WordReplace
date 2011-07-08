@@ -16,9 +16,10 @@ import org.bukkit.util.config.Configuration;
  *
  * @author DCSiira
  */
+@SuppressWarnings("unused")
 public class WordReplace extends JavaPlugin {
-    private final WRConfiguration config = new WRConfiguration(this);
-    private final WRPlayerListener playerListener = new WRPlayerListener(this, config);
+    public WRConfiguration config = new WRConfiguration(this);
+    private final WRPlayerListener playerListener = new WRPlayerListener(this);
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
 
     private PluginManager pm;
@@ -45,7 +46,7 @@ public class WordReplace extends JavaPlugin {
         
         pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Lowest, this); //Register Event type/priority with Bukkit
 
-        getCommand("WR").setExecutor(new WRCommand(this, config)); //Register command "/WR" with Bukkit
+        getCommand("WR").setExecutor(new WRCommand(this)); //Register command "/WR" with Bukkit
         System.out.println(this.getDescription().getName() + " version " + this.getDescription().getVersion() + " is enabled!" );
     }
 
@@ -62,4 +63,9 @@ public class WordReplace extends JavaPlugin {
         debugees.put(player, value);
     }
 
+    public boolean reload(){
+		config = new WRConfiguration(this);
+		config.checkConfigFile();
+		return true;
+    }
 }

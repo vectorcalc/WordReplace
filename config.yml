@@ -1,15 +1,31 @@
-# Word Replace Version 3.0
+# Word Replace Version 4.0
 # Changing Word1 -> Word2 since 2011 (Not that long)
+
+#Supported colors are: (case insensitive)
+# BLACK OR &0
+# DARK_BLUE OR &1
+# DARK_GREEN OR &2
+# DARK_AQUA OR &3
+# DARK_RED OR &4
+# DARK_PURPLE OR &5
+# GOLD OR &6 OR DARK_YELLOW
+# GRAY OR &7
+# DARK_GRAY OR &8
+# BLUE OR &9
+# GREEN OR &A
+# AQUA OR &B
+# RED OR &C
+# LIGHT_PURPLE OR &D OR PINK
+# YELLOW OR &E
+# WHITE OR &F
+#This defaults to WHITE if it finds an error
 
 #The color of chat after the replaced word
 normal-chat-color: WHITE
 
-#The number of word lists(VERY IMPORTANT)
-number-of-lists: 2
-
 # A list of List<String> values that go in this order:
 #  - WordColor,Word2,Words:To:Be:Replaced
-# no spaces, there are two examples below
+# no spaces, except after the dash, there are two examples below
 
 replaceList: 
 - AQUA,Admin,dcsiira:dc:siira
