@@ -1,34 +1,25 @@
-# Word Replace Version 4.0
+# Word Replace Version 5.0
 # Changing Word1 -> Word2 since 2011 (Not that long)
 
-#Supported colors are: (case insensitive)
-# BLACK OR &0
-# DARK_BLUE OR &1
-# DARK_GREEN OR &2
-# DARK_AQUA OR &3
-# DARK_RED OR &4
-# DARK_PURPLE OR &5
-# GOLD OR &6 OR DARK_YELLOW
-# GRAY OR &7
-# DARK_GRAY OR &8
-# BLUE OR &9
-# GREEN OR &A
-# AQUA OR &B
-# RED OR &C
-# LIGHT_PURPLE OR &D OR PINK
-# YELLOW OR &E
-# WHITE OR &F
-#This defaults to WHITE if it finds an error
+# Supported colors are: (case insensitive)
+# - Black(&0)             Dark_Gray(&8)
+# - Dark_Blue(&1)         Blue(&9)
+# - Dark_Green(&2)        Green(&a)
+# - Dark_Aqua(&3)         Aqua(&b)
+# - Dark_Red(&4)          Red(&c)
+# - Dark_Purple(&5)       Light_Purple(&d)
+# - Gold(&6)              Yellow(&e)
+# - Gray(&7)              White(&f)
+# - You can also use Pink for Light_Purple
+# This defaults to WHITE if it finds an error
 
-#The color of chat after the replaced word
+# An Example is "AQUA,Admin,dcsiira:dc:siira"
+# Which replaces the words "dc","dcsiira","siira" with "Admin", Colored in AQUA
+
 normal-chat-color: WHITE
-
-# A list of List<String> values that go in this order:
-#  - WordColor,Word2,Words:To:Be:Replaced
-# no spaces, except after the dash, there are two examples below
-
-replaceList: 
+word-replace-list:
 - AQUA,Admin,dcsiira:dc:siira
-- RED,Almighty God,Notch:Marcus:God
-
-# The First Example replaces the words "dcsiira", "dc", and "siira" with admin colored AQUA
+- RED,Notch,Maker:Notch:xNotch
+- GOLD,GOLD,GOLD:dark_yellow
+- Aqua,Rain,Duration
+- pink,alex,Dueler

@@ -2,14 +2,13 @@
 package dcsiira.wordreplace;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
  * Handler for the /WR command.
- * @author DCSiiras
+ * @author DCSiira
  */
 public class WRCommand implements CommandExecutor
 {
@@ -23,47 +22,88 @@ public class WRCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] split)
     {
-        if (!(sender instanceof Player)) {
-            return false;
-        }
-        Player player = (Player) sender;
-
-        if (split.length == 1){
+    	if(!sender.isOp())
+    	{
+    		sender.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] You are not able to use this command, OP's only");
+    		return true;
+    	}
+        if (split.length == 1)
+        {
         	if(split[0].equalsIgnoreCase("version"))
         	{
                 String version = plugin.getDescription().getVersion();
-                player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Version: " + version);
+                sender.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Version: " + version);
+                return true;
         	}
         	else if(split[0].equalsIgnoreCase("reload"))
         	{
-        		//if(plugin.reload())
-        		//	player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Reloaded Successfully");
-        		//else
-        		//	player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Error on reload");  
-        		player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] This does not work YET");
+        		plugin.config.readNodes();
+        		sender.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Reload Complete");
+        		return true;
         	}
-        	else if(split[0].equalsIgnoreCase("list"))        			
-        		wordList(player);
-        	return true;
+        	else if(split[0].equalsIgnoreCase("list"))
+        	{
+        		wordList(sender);
+            	return true;
+        	}
         }
-        else {
-            return false;
+        if (split.length == 2)
+        {
+        	if(split[0].equalsIgnoreCase("remove"))
+        	{
+                remove(Integer.parseInt(split[1]) + 1);
+                sender.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Removing List Complete");
+                return true;
+        	}
         }
+        else
+        {
+        	if(split[0].equalsIgnoreCase("add"))
+        	{
+        		add(split);
+        		sender.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Adding Complete");
+        		return true;
+        	}
+        }
+        return false;
     }
-    public void wordList(Player player)
+    public boolean wordList(CommandSender sender)
     {
-        player.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE +"] Replaces:");
-        for(int listLoop = 0; listLoop < plugin.config.numberOfLists; listLoop++)
+    	sender.sendMessage("[" + ChatColor.AQUA + "WordReplace" + ChatColor.WHITE + "] Replaces:");
+        for (int listLoop = 0; listLoop < this.plugin.wrList.size(); listLoop++)
+        {
+          String wordReplacing = this.plugin.parseWordReplacing(listLoop);
+          ChatColor wordColor = this.plugin.parseWordColor(listLoop);
+          String wordsBeingReplaced = "[";
+
+          for (String tempWordBeingReplaced : this.plugin.parseWordsBeingReplaced(listLoop)) {
+            wordsBeingReplaced = wordsBeingReplaced + tempWordBeingReplaced + ", ";
+          }
+          wordsBeingReplaced = wordsBeingReplaced.substring(0, wordsBeingReplaced.length() - 2);
+          sender.sendMessage(wordsBeingReplaced + "] with " + wordColor + wordReplacing);
+        }
+        return true;
+      }
+
+    public boolean add(String[] split)
+    {
+    	
+    	String newList = split[1] + "," + split[2] + ",";
+    	for(int loop = 3; loop < split.length; loop++)
     	{
-        	String wordReplacing = plugin.config.parseWordReplacing(listLoop);
-        	String wordColor = plugin.config.parseWordColor(listLoop);
-        	String wordsBeingReplaced = "";
-        	
-        	for (String tempWordBeingReplaced : plugin.config.parseWordsBeingReplaced(listLoop))
-        		wordsBeingReplaced += tempWordBeingReplaced + ", ";
-        	
-        	wordsBeingReplaced = wordsBeingReplaced.substring(0, wordsBeingReplaced.length()-2);
-        	player.sendMessage(wordsBeingReplaced + " with " + plugin.config.getChatColor(wordColor) + wordReplacing );
+    		newList += split[loop] + ":";
     	}
+    	newList = newList.substring(0, newList.length()-1);
+    	this.plugin.wrList.add(newList);
+    	this.plugin.config.writeNode("word-replace-list",this.plugin.wrList);
+    	this.plugin.config.readNodes();
+    	return true;
+    }
+    public boolean remove(int removeList)
+    {
+    	this.plugin.wrList.remove(removeList);
+    	this.plugin.config.writeNode("word-replace-list",this.plugin.wrList);
+    	this.plugin.config.readNodes();
+    	return true;
     }
 }
